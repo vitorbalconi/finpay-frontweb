@@ -1,0 +1,87 @@
+<header class="topbar">
+  <div class="brand"><span class="brand-mark" aria-hidden="true">F</span><span>FinPay</span></div>
+  <div class="environment"><span class="pulse"></span>Payment Operations</div>
+</header>
+
+<main class="page">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">VISÃO OPERACIONAL</p>
+      <h1>Olá, time de pagamentos.</h1>
+      <p class="subtitle">Acompanhe a saúde e o desempenho das transações em tempo real.</p>
+    </div>
+    <button class="refresh" type="button" (click)="loadDashboard()" [disabled]="loading">
+      <span aria-hidden="true">↻</span> Atualizar dados
+    </button>
+  </section>
+
+  @if (loading) {
+    <section class="state" aria-live="polite">
+      <span class="spinner"></span><h2>Carregando operações</h2><p>Consultando os serviços da FinPay...</p>
+    </section>
+  } @else if (error) {
+    <section class="state error-state" role="alert">
+      <div class="state-icon">!</div><h2>Não foi possível conectar à API</h2>
+      <p>Confira se o backend está ativo em localhost:3000 e tente novamente.</p>
+      <button type="button" (click)="loadDashboard()">Tentar novamente</button>
+    </section>
+  } @else if (data; as dashboard) {
+    <section class="overview" aria-label="Indicadores de transações">
+      <article class="metric-card featured">
+        <div class="metric-head"><span>Total de transações</span><span class="icon">↗</span></div>
+        <strong>{{ dashboard.metrics.total }}</strong><small>Transações processadas</small>
+      </article>
+      <article class="metric-card">
+        <div class="metric-head"><span>Aprovadas</span><span class="icon success">✓</span></div>
+        <strong>{{ dashboard.metrics.approved }}</strong><small class="positive">Operações concluídas</small>
+      </article>
+      <article class="metric-card">
+        <div class="metric-head"><span>Recusadas</span><span class="icon danger">×</span></div>
+        <strong>{{ dashboard.metrics.declined }}</strong><small>Requerem acompanhamento</small>
+      </article>
+      <article class="metric-card">
+        <div class="metric-head"><span>Taxa de aprovação</span><span class="icon">%</span></div>
+        <strong>{{ dashboard.metrics.approvalRate | number:'1.0-2' }}%</strong>
+        <div class="progress"><span [style.width.%]="dashboard.metrics.approvalRate"></span></div>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel transactions">
+        <div class="panel-title"><div><h2>Transações recentes</h2><p>Últimas movimentações processadas pela plataforma.</p></div><span>{{ dashboard.transactions.length }} registros</span></div>
+        @if (dashboard.transactions.length) {
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>TRANSAÇÃO</th><th>DATA E HORA</th><th>VALOR</th><th>STATUS</th></tr></thead>
+              <tbody>
+                @for (transaction of dashboard.transactions; track transaction.id) {
+                  <tr>
+                    <td><span class="transaction-id">{{ transaction.id }}</span><small>{{ transaction.currency }}</small></td>
+                    <td>{{ transaction.createdAt | date:'dd MMM yyyy, HH:mm':'':'pt-BR' }}</td>
+                    <td class="amount">{{ transaction.amount | currency:transaction.currency:'symbol':'1.2-2':currencyLocale(transaction.currency) }}</td>
+                    <td><span class="badge" [class.approved]="transaction.status === 'approved'">{{ transaction.status === 'approved' ? 'Aprovada' : 'Recusada' }}</span></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="empty"><span>◎</span><h3>Nenhuma transação encontrada</h3><p>Novas movimentações aparecerão aqui.</p></div>
+        }
+      </article>
+
+      <aside class="side-stack">
+        <article class="panel api-status">
+          <div class="panel-title"><div><h2>Status da API</h2><p>Disponibilidade dos serviços</p></div><span class="live-dot"></span></div>
+          <div class="status-row"><span class="status-check">✓</span><div><strong>Todos os sistemas operacionais</strong><small>Última verificação: {{ dashboard.health.timestamp | date:'HH:mm:ss' }}</small></div></div>
+          <dl><div><dt>Ambiente</dt><dd>Desenvolvimento</dd></div><div><dt>Status</dt><dd class="online">{{ dashboard.health.status }}</dd></div><div><dt>Backend</dt><dd>v{{ dashboard.version.version }}</dd></div></dl>
+        </article>
+        <article class="release-card">
+          <div class="rocket" aria-hidden="true">◆</div><div><span>FRONTEND RELEASE</span><strong>Versão {{ frontendVersion }}</strong><small>FinPay Web Application</small></div>
+        </article>
+      </aside>
+    </section>
+  }
+</main>
+
+<footer><span>FinPay — Payment Operations</span><span>Observabilidade para pagamentos confiáveis</span></footer>
