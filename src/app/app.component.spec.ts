@@ -19,5 +19,8 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).toContain('Total de transações');
     expect(fixture.nativeElement.textContent).toContain('Nenhuma transação encontrada');
+    expect(fixture.nativeElement.querySelector('.release-version').textContent).toContain('Versão 1.1.0');
+    expect(fixture.nativeElement.textContent).toContain('Prévia de liquidação instantânea');
+    expect(fixture.nativeElement.textContent).toContain('Novo');
   });
 });

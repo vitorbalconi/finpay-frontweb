@@ -71,13 +71,20 @@
       </article>
 
       <aside class="side-stack">
+        <article class="panel preview-card">
+          <div class="preview-heading">
+            <h2>Prévia de liquidação instantânea</h2>
+            <span class="new-badge">Novo</span>
+          </div>
+          <p>Visualize a disponibilidade mais rápida de recursos com informações de liquidação quase em tempo real.</p>
+        </article>
         <article class="panel api-status">
           <div class="panel-title"><div><h2>Status da API</h2><p>Disponibilidade dos serviços</p></div><span class="live-dot"></span></div>
           <div class="status-row"><span class="status-check">✓</span><div><strong>Todos os sistemas operacionais</strong><small>Última verificação: {{ dashboard.health.timestamp | date:'HH:mm:ss' }}</small></div></div>
-          <dl><div><dt>Ambiente</dt><dd>Desenvolvimento</dd></div><div><dt>Status</dt><dd class="online">{{ dashboard.health.status }}</dd></div><div><dt>Backend</dt><dd>v{{ dashboard.version.version }}</dd></div></dl>
+          <dl><div><dt>Status</dt><dd class="online">{{ dashboard.health.status }}</dd></div><div><dt>Backend</dt><dd>{{ dashboard.version.version }}</dd></div></dl>
         </article>
         <article class="release-card">
-          <div class="rocket" aria-hidden="true">◆</div><div><span>FRONTEND RELEASE</span><strong>Versão {{ frontendVersion }}</strong><small>FinPay Web Application</small></div>
+          <div class="rocket" aria-hidden="true">◆</div><div><span>FRONTEND RELEASE</span><strong class="release-version">Versão {{ frontendVersion }}</strong><small>FinPay Web Application</small></div>
         </article>
       </aside>
     </section>
